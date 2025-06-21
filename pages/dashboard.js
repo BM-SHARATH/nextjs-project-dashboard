@@ -2,6 +2,7 @@ import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import withAuth from "@/lib/withAuth";
+import Link from "next/link";
 
 function DashboardPage() {
   const { user } = useAuth();
@@ -19,24 +20,24 @@ function DashboardPage() {
           You are logged in as: <strong>{user?.email}</strong>
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <a
+          <Link
             href="/projects"
             className="p-4 bg-white rounded shadow hover:shadow-md"
           >
             📁 View Projects
-          </a>
-          <a
+          </Link>
+          <Link
             href="/map"
             className="p-4 bg-white rounded shadow hover:shadow-md"
           >
             🗺️ View Map
-          </a>
-          <a
+          </Link>
+          <Link
             href="/charts"
             className="p-4 bg-white rounded shadow hover:shadow-md"
           >
             📊 View Charts
-          </a>
+          </Link>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import withAuth from "@/lib/withAuth";
+import Image from "next/image";
 
 function ProjectDetails() {
   const router = useRouter();
@@ -55,7 +56,7 @@ function ProjectDetails() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {project.images?.length > 0 ? (
               project.images.map((src, idx) => (
-                <img
+                <Image
                   key={idx}
                   src={src}
                   alt={`Project Image ${idx + 1}`}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../lib/firebase";
+import Link from "next/link";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -44,9 +45,9 @@ export default function SignupPage() {
         </button>
         <p className="text-sm text-center">
           Already have an account?
-          <a href="/login" className="text-blue-500 hover:underline">
+          <Link href="/login" className="text-blue-500 hover:underline">
             Log in
-          </a>
+          </Link>
         </p>
         {error && (
           <p className="text-red-500 text-sm mt-4 text-center">{error}</p>

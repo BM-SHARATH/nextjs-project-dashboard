@@ -2,6 +2,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { auth } from "../lib/firebase";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -44,15 +45,18 @@ export default function LoginPage() {
         </button>
         <p className="text-sm text-center">
           Forgot your password?
-          <a href="/forgot-password" className="text-blue-500 hover:underline">
+          <Link
+            href="/forgot-password"
+            className="text-blue-500 hover:underline"
+          >
             Reset
-          </a>
+          </Link>
         </p>
         <p className="text-sm text-center mt-2">
           Do not have an account?
-          <a href="/signup" className="text-blue-500 hover:underline">
+          <Link href="/signup" className="text-blue-500 hover:underline">
             Sign up
-          </a>
+          </Link>
         </p>
         {error && (
           <p className="text-red-500 text-sm mt-4 text-center">{error}</p>
