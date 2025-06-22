@@ -13,6 +13,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { useRouter } from "next/router";
 import withAuth from "@/lib/withAuth";
+import Navbar from "../components/Navbar";
 
 function MapPage() {
   const mapRef = useRef(null);
@@ -20,56 +21,69 @@ function MapPage() {
 
   useEffect(() => {
     const loadMap = async () => {
-      const snapshot = await getDocs(collection(db, "projects"));
-      const projects = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      try {
+        const snapshot = await getDocs(collection(db, "projects"));
+        const projects = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
-      const features = projects.map((project) => {
-        const feature = new Feature({
-          geometry: new Point(fromLonLat(project.coords)),
-          name: project.name,
+        const features = projects
+          .filter((project) => Array.isArray(project.coords))
+          .map((project) => {
+            const feature = new Feature({
+              geometry: new Point(fromLonLat(project.coords)),
+              name: project.name,
+            });
+            feature.setStyle(
+              new Style({
+                image: new Icon({
+                  anchor: [0.5, 1],
+                  src: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+                  scale: 0.05,
+                }),
+              })
+            );
+            feature.setId(project.id);
+            return feature;
+          });
+
+        const vectorLayer = new VectorLayer({
+          source: new VectorSource({ features }),
         });
-        feature.setStyle(
-          new Style({
-            image: new Icon({
-              anchor: [0.5, 1],
-              src: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-              scale: 0.05,
-            }),
-          })
-        );
-        feature.setId(project.id);
-        return feature;
-      });
 
-      const vectorLayer = new VectorLayer({
-        source: new VectorSource({ features }),
-      });
-
-      const map = new Map({
-        target: mapRef.current,
-        layers: [new TileLayer({ source: new OSM() }), vectorLayer],
-        view: new View({
-          center: fromLonLat([77.5946, 12.9716]),
-          zoom: 5,
-        }),
-      });
-
-      map.on("singleclick", function (e) {
-        map.forEachFeatureAtPixel(e.pixel, function (feature) {
-          const id = feature.getId();
-          if (id) {
-            router.push(`/projects/${id}`);
-          }
+        const map = new Map({
+          target: mapRef.current,
+          layers: [new TileLayer({ source: new OSM() }), vectorLayer],
+          view: new View({
+            center: fromLonLat([77.5946, 12.9716]),
+            zoom: 5,
+          }),
         });
-      });
+
+        map.on("singleclick", function (e) {
+          map.forEachFeatureAtPixel(e.pixel, function (feature) {
+            const id = feature.getId();
+            if (id) {
+              router.push(`/projects/${id}`);
+            }
+          });
+        });
+      } catch (err) {
+        console.log("Error loading map:", err);
+      }
     };
 
     loadMap();
   }, [router]);
 
-  return <div ref={mapRef} className="w-full h-screen" />;
+  return (
+    <>
+      <Navbar />
+      <div className="w-full h-screen bg-gray-100 flex items-center justify-center">
+        <div ref={mapRef} className="w-full h-full rounded shadow" />
+      </div>
+    </>
+  );
 }
 export default withAuth(MapPage);
