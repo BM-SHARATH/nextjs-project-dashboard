@@ -6,6 +6,7 @@ import { auth, db } from "../lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useState } from "react";
 import Navbar from "../components/Navbar";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -39,24 +40,24 @@ export default function DashboardPage() {
             <h1 className="text-3xl font-bold">Welcome, {displayName}</h1>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <a
+            <Link
               href="/projects"
               className="p-4 bg-white rounded shadow hover:shadow-md"
             >
               📁 View Projects
-            </a>
-            <a
+            </Link>
+            <Link
               href="/map"
               className="p-4 bg-white rounded shadow hover:shadow-md"
             >
               🗘️ View Map
-            </a>
-            <a
+            </Link>
+            <Link
               href="/charts"
               className="p-4 bg-white rounded shadow hover:shadow-md"
             >
               📊 View Charts
-            </a>
+            </Link>
           </div>
         </div>
       </div>
