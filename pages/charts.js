@@ -10,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import withAuth from "@/lib/withAuth";
+import Navbar from "../components/Navbar";
 
 ChartJS.register(
   CategoryScale,
@@ -44,14 +45,17 @@ function ChartsPage() {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Charts</h1>
-        <div className="bg-white p-4 rounded shadow">
-          <Line data={data} options={options} />
+    <>
+      <Navbar />
+      <div className="p-6 bg-gray-100 min-h-screen">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6">Charts</h1>
+          <div className="bg-white p-4 rounded shadow">
+            <Line data={data} options={options} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
